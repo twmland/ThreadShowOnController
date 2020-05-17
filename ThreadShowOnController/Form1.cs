@@ -16,7 +16,7 @@ namespace ThreadShowOnController
         private delegate void DisplayTime(TextBox txtBx);
         private void ShowCurrentTime(TextBox txtBx)
         {
-            txtBx.Text = DateTime.Now.ToString("hh:MM:ss");     
+            txtBx.Text = DateTime.Now.ToString("hh:mm:ss");     
         }
        
         public Form1()
@@ -28,6 +28,7 @@ namespace ThreadShowOnController
         {
             ParameterizedThreadStart threadStart = new ParameterizedThreadStart(ShowTime);
             Thread thread = new Thread(threadStart);
+            thread.IsBackground = true;
             thread.Start(null);
         }
         private void ShowTime(object obj)
@@ -38,7 +39,14 @@ namespace ThreadShowOnController
                 if (TxtBxNow.InvokeRequired)
                 {
                     DisplayTime displayTimeDelegate = new DisplayTime(ShowCurrentTime);
-                    this.Invoke(displayTimeDelegate, TxtBxNow);
+                    try
+                    {
+                        this.Invoke(displayTimeDelegate, TxtBxNow);
+                    }
+                    catch
+                    {
+
+                    }
                 }
                 else
                 {
